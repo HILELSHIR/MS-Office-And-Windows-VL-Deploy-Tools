@@ -2,8 +2,8 @@
 **Set of tools to Activate / Convert / Deploy Office & Windows**
 
 **Please check how to use file**
+- Support Office 2010 to Office 2021
 - Support Windows Vista To Windows 11
-- Office 2010 to Office 2021
 # Tools List
 - Scrub tool [for office 2010 - 2021]
 - Media Download tool [for office 2013 - 2021]
