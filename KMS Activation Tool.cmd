@@ -550,8 +550,19 @@ if defined VL_Product_Not_Found (
 	goto :eof
 )
 
-for /f "tokens=1 skip=3 delims=," %%g in ('type "%temp%\result"') do (if not defined windowsID set windowsID=%%g)
-for /f "tokens=1,2 delims=*" %%r in ('type %Windows_Keys_List%') do (if /i '%%r' equ '!windowsID!' set serial=%%s)
+for /f "tokens=1 skip=3 delims=," %%g in ('type "%temp%\result"') do (if not defined windowsID set "windowsID=%%g")
+if not defined windowsID goto :eof
+
+for %%A in (
+	b71515d9-89a2-4c60-88c8-656fbcca7f3a,af43f7f0-3b1e-4266-a123-1fdb53f4323b,075aca1f-05d7-42e5-a3ce-e349e7be7078
+	11a37f09-fb7f-4002-bd84-f3ae71d11e90,43f2ab05-7c87-4d56-b27c-44d0f9a3dabd,2cf5af84-abab-4ff0-83f8-f040fb2576eb
+	6ae51eeb-c268-4a21-9aae-df74c38b586d,ff808201-fec6-4fd4-ae16-abbddade5706,34260150-69ac-49a3-8a0d-4a403ab55763
+	4dfd543d-caa6-4f69-a95f-5ddfe2b89567,5fe40dd6-cf1f-4cf2-8729-92121ac2e997,903663f7-d2ab-49c9-8942-14aa9e0a9c72
+	2cc171ef-db48-4adc-af09-7c574b37f139,5b2add49-b8f4-42e0-a77c-adad4efeeeb1
+) do ( if /i '!windowsID!' equ '%%A' (
+	set "windowsID="
+	exit /b ))
+for /f "tokens=1,2 delims=*" %%r in ('type %Windows_Keys_List%') do (if /i '%%r' equ '!windowsID!' set "serial=%%s")
 goto :eof
 
 :Office_Licence_Worker
