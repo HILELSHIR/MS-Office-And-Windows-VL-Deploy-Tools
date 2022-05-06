@@ -39,7 +39,7 @@ ElseIf WScript.Arguments.Item(0)="/ACTIVATE" Then
 	' To Err Is VBScript – Part 1
 	' https://docs.microsoft.com/en-us/previous-versions/tn-archive/ee692852(v=technet.10)?redirectedfrom=MSDN
 	
-	WScript.Echo "Error:" & Err.Number
+	WScript.Echo "Error:" & Hex(Err.Number)
 	Err.Clear
 
 ElseIf WScript.Arguments.Item(0)="/UninstallProductKey" Then
