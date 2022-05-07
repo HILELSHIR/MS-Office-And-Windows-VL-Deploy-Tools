@@ -1252,7 +1252,7 @@ set GracePeriod=!GracePeriod: =!
 echo Old Grace               = %4
 echo New Grace               = !GracePeriod!
 if not defined lastErr echo Status                  = Unknown
-if defined lastErr if /i !lastErr! GTR 0 (echo Status                  = Failed ^(Error %lastErr%^)) else (echo Status                  = Succeeded ^(Error %lastErr%^))
+if defined lastErr if /i '!lastErr!' NEQ '0' (echo Status                  = Failed ^(Error 0x%lastErr%^)) else (echo Status                  = Succeeded ^(Error %lastErr%^))
 echo !SPP_KMS_Class! 			| >nul find /i "Office" 	&& (echo Product Class           = OfficeSoftwareProtectionService) || (echo Product Class           = SoftwareLicensingProduct)
 echo !Product_Licensing_Class! 	| >nul find /i "Office" 	&& (echo Licensing Class         = OfficeSoftwareProtectionProduct) || (echo Licensing Class         = SoftwareLicensingProduct)
 goto :eof
