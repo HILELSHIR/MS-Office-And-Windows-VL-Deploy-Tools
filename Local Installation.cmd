@@ -27,6 +27,28 @@ set XSPP_USER=HKEY_USERS\S-1-5-20\SOFTWARE\Microsoft\Windows NT\CurrentVersion\S
 :: basic validtion
 call :cleanVariable
 
+rem get rid of the not genuine banner solution by Windows_Addict
+	
+rem first NAG ~ check for IP address On start up
+rem https://forums.mydigitallife.net/threads/kms_vl_all-smart-activation-script.79535/page-180#post-1659178
+
+rem second NAG ~ check if ip address is from range of 0.0.0.0 to ?
+rem HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Licensing\LVUXRecords
+rem https://forums.mydigitallife.net/threads/kms_vl_all-smart-activation-script.79535/page-237#post-1734148
+
+rem How-to: Generate Random Numbers
+rem https://ss64.com/nt/syntax-random.html
+
+Set /a rand_V=(%RANDOM%*20/32768)+1    || Add-in
+Set /a rand_A=(%RANDOM%*255/32768)+1   || 192-255
+Set /a rand_B=(%RANDOM%*255/32768)+1   || 168-255
+Set /a rand_C=(%RANDOM%*255/32768)+1   || 000-255
+Set /a rand_D=(%RANDOM%*255/32768)+1   || 000-255
+
+if !rand_A! LSS 192 Set /a rand_A+=192-!rand_A!+!rand_V!
+if !rand_B! LSS 168 Set /a rand_B+=168-!rand_B!+!rand_V!
+set "IP_ADDRESS=!rand_A!.!rand_B!.!rand_C!.!rand_D!"
+
 :::: Run as Admin with native shell, any path, params, loop guard, minimal i/o, by AveYo
 >nul reg add hkcu\software\classes\.Admin\shell\runas\command /f /ve /d "cmd /x /d /r set \"f0=%%2\" &call \"%%2\" %%3" & set "_= %*"
 >nul fltmc || if "%f0%" neq "%~f0" ( cd.>"%tmp%\runas.Admin" & start "%~n0" /high "%tmp%\runas.Admin" "%~f0" "%_:"=""%" &exit /b )
@@ -591,10 +613,10 @@ if not defined LocalKms 	call :activate_Online
 
 :end
 
-rem KMS_VL_ALL fix for Not genuine
-1>nul 2>nul reg add "%XSPP_USER%" /f /v KeyManagementServiceName /t REG_SZ /d "0.0.0.0"
-1>nul 2>nul reg add "%XSPP_HKLM_X32%" /f /v KeyManagementServiceName /t REG_SZ /d "0.0.0.0"
-1>nul 2>nul reg add "%XSPP_HKLM_X64%" /f /v KeyManagementServiceName /t REG_SZ /d "0.0.0.0"
+rem Windows_Addict Not genuine fix
+1>nul 2>nul reg add "%XSPP_USER%" /f /v KeyManagementServiceName /t REG_SZ /d "%IP_ADDRESS%"
+1>nul 2>nul reg add "%XSPP_HKLM_X32%" /f /v KeyManagementServiceName /t REG_SZ /d "%IP_ADDRESS%"
+1>nul 2>nul reg add "%XSPP_HKLM_X64%" /f /v KeyManagementServiceName /t REG_SZ /d "%IP_ADDRESS%"
 
 echo.
 echo please wait 5 seconds..
@@ -2035,7 +2057,7 @@ Rem abbodi1406 KMS VL ALL LOCAL ACTIVATION Script
 :STARTKMSActivation
 set SSppHook=0
 set KMSPort=1688
-set KMSHostIP=0.0.0.0
+set KMSHostIP=%IP_ADDRESS%
 set KMS_RenewalInterval=10080
 set KMS_ActivationInterval=120
 set KMS_HWID=0x3A1C049600B60076
@@ -2195,7 +2217,7 @@ if %OsppHook% EQU 0 (
 reg delete "%IFEO%\%1" /f >nul 2>nul
 )
 if %OsppHook% NEQ 0 for %%A in (Debugger,VerifierDlls,VerifierDebug,VerifierFlags,GlobalFlag,KMS_Emulation,KMS_ActivationInterval,KMS_RenewalInterval,Office2010,Office2013,Office2016,Office2019) do reg delete "%IFEO%\%1" /v %%A /f >nul 2>nul
-reg add "HKLM\%OPPk%" /f /v KeyManagementServiceName /t REG_SZ /d "0.0.0.0" >nul 2>&1
+reg add "HKLM\%OPPk%" /f /v KeyManagementServiceName /t REG_SZ /d "%IP_ADDRESS%" >nul 2>&1
 reg add "HKLM\%OPPk%" /f /v KeyManagementServicePort /t REG_SZ /d "1688" >nul 2>&1
 goto :eof
 
