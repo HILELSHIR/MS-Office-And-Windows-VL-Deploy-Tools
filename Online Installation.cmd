@@ -39,10 +39,14 @@ rem https://forums.mydigitallife.net/threads/kms_vl_all-smart-activation-script.
 rem How-to: Generate Random Numbers
 rem https://ss64.com/nt/syntax-random.html
 
-Set /a rand_A=(%RANDOM%*(255-192)/32768)+193
-Set /a rand_B=(%RANDOM%*(255-168)/32768)+169
+Set /a rand_A=192
+Set /a rand_B=168
 Set /a rand_C=(%RANDOM%*255/32768)+1
 Set /a rand_D=(%RANDOM%*255/32768)+1
+
+REM Set /a rand_A=(%RANDOM%*(255-192)/32768)+193
+REM Set /a rand_B=(%RANDOM%*(255-168)/32768)+169
+
 set "IP_ADDRESS=!rand_A!.!rand_B!.!rand_C!.!rand_D!"
 
 :::: Run as Admin with native shell, any path, params, loop guard, minimal i/o, by AveYo
