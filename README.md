@@ -21,3 +21,7 @@
 	decided to improve them, to work differently than the original way.
 	so have to re-written them from scratch,
 	and also add Online activation as a backup.
+	Yerong 			   Office           Documention	
+	letsgoawayhell	           Office 2010      Regitration Keys
+	ratzlefatz                 Office           Activation / documention
+	qewlpal, abbodi1406        Office & Windows Activation / documention
