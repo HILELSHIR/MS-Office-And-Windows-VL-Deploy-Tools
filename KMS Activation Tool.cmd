@@ -559,19 +559,19 @@ set windowsID=
 set VL_Product_Not_Found=
 
 for /f "skip=7 tokens=2 delims=:" %%g in ('"dism /English /Online /Get-CurrentEdition"') do set "EditionID=%%g"
-IF /I "%EditionID%"=="IoTEnterprise" SET "EditionID=Enterprise"
-IF /I "%EditionID%"=="IoTEnterpriseS" SET "EditionID=EnterpriseS"
-IF /I "%EditionID%"=="ProfessionalSingleLanguage" SET "EditionID=Professional"
-IF /I "%EditionID%"=="ProfessionalCountrySpecific" SET "EditionID=Professional"
+IF /I "!EditionID!"=="IoTEnterprise" 				SET "EditionID=Enterprise"
+IF /I "!EditionID!"=="IoTEnterpriseS" 				SET "EditionID=EnterpriseS"
+IF /I "!EditionID!"=="ProfessionalSingleLanguage" 	SET "EditionID=Professional"
+IF /I "!EditionID!"=="ProfessionalCountrySpecific" 	SET "EditionID=Professional"
 
-set wmiSearch=Name like '%%%%!edition!%%%%' and Description like '%%%%VOLUME_KMSCLIENT%%%%' and ApplicationId like '%%%%55c92734-d682-4d71-983e-d6ec3f16059f%%%%'
+set wmiSearch=Name like '%%%%!EditionID!%%%%' and Description like '%%%%VOLUME_KMSCLIENT%%%%' and ApplicationId like '%%%%55c92734-d682-4d71-983e-d6ec3f16059f%%%%'
 call :query "ID" "SoftwareLicensingProduct" "!wmiSearch!"
 
-(type "%temp%\result"|find /i ",">nul) || set VL_Product_Not_Found=true
-(type "%temp%\result"|find /i %invalid%>nul) && set VL_Product_Not_Found=true
-(type "%temp%\result"|find /i %ProductError%>nul) && set VL_Product_Not_Found=true
-(type "%temp%\result"|find /i %ProductNotExist%>nul) && set VL_Product_Not_Found=true
-(type "%temp%\result"|find /i %ProductNotFound%>nul) && set VL_Product_Not_Found=true
+(type "%temp%\result"|find /i ",">nul) 					|| set VL_Product_Not_Found=true
+(type "%temp%\result"|find /i %invalid%>nul) 			&& set VL_Product_Not_Found=true
+(type "%temp%\result"|find /i %ProductError%>nul) 		&& set VL_Product_Not_Found=true
+(type "%temp%\result"|find /i %ProductNotExist%>nul) 	&& set VL_Product_Not_Found=true
+(type "%temp%\result"|find /i %ProductNotFound%>nul) 	&& set VL_Product_Not_Found=true
 if defined VL_Product_Not_Found (
 	echo ERROR ##### Couldn't find Any windows Supported ID
 	goto :eof
