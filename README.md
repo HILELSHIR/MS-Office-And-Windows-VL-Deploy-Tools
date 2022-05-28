@@ -12,3 +12,12 @@
 - Kms activation tool [For Windows Vista to Win 11 / [*] Office 2010 to office 2021]
 
 **[*]Include Office Retail to Volume Conversion [2016 to 2021 ONLY]**
+
+# Credit.
+	these scripts are based on hard work from -
+	these great people from the MDL forum.
+	base activation script is taken from abbodi1406 KMS_VL_ALL famous script.
+	the other things, License Converter & more,
+	decided to improve them, to work differently than the original way.
+	so have to re-written them from scratch,
+	and also add Online activation as a backup.
