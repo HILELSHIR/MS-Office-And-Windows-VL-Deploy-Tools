@@ -556,9 +556,13 @@ goto :eof
 
 set serial=
 set windowsID=
+set EditionID=
 set VL_Product_Not_Found=
 
 for /f "skip=7 tokens=2 delims=:" %%g in ('"dism /English /Online /Get-CurrentEdition"') do set "EditionID=%%g"
+if not defined EditionID goto :eof
+
+set "EditionID=!EditionID: =!"
 IF /I "!EditionID!"=="IoTEnterprise" 				SET "EditionID=Enterprise"
 IF /I "!EditionID!"=="IoTEnterpriseS" 				SET "EditionID=EnterpriseS"
 IF /I "!EditionID!"=="ProfessionalSingleLanguage" 	SET "EditionID=Professional"
