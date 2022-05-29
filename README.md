@@ -20,7 +20,8 @@
 	The base activation script is taken from abbodi1406 KMS_VL_ALL famous script.
 	the other things, License Converter & more,
 	decided to improve them, to work differently than the original way.
-	so have to re-written them from scratch,
+	
+	So have to re-written them from scratch,
 	Also add support for Office 2010 / 2013.
 	Also add Online activation as a backup.
 	
