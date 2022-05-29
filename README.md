@@ -16,11 +16,13 @@
 # Credit.
 	these scripts are based on hard work from -
 	these great people from the MDL forum.
-	base activation script is taken from abbodi1406 KMS_VL_ALL famous script.
+	
+	The base activation script is taken from abbodi1406 KMS_VL_ALL famous script.
 	the other things, License Converter & more,
 	decided to improve them, to work differently than the original way.
 	so have to re-written them from scratch,
-	and also add Online activation as a backup.
+	Also add support for Office 2010 / 2013.
+	Also add Online activation as a backup.
 	
 	Yerong 			   Office           Documention	
 	letsgoawayhell	           Office 2010      Regitration Keys
