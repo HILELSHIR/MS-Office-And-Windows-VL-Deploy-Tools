@@ -13,7 +13,7 @@
 
 **[*]Include Office Retail to Volume Conversion [2016 to 2021 ONLY]**
 
-# Credit.
+# Credits
 	these scripts are based on hard work from -
 	these great people from the MDL forum.
 	
