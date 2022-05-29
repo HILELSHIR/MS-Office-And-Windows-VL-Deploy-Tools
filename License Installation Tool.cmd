@@ -117,7 +117,8 @@ set "BuildNumber="
 set "Windows_7_Or_Earlier="
 
 call :query "buildnumber" "Win32_OperatingSystem"
-for /f "tokens=1 skip=3 delims=," %%g in ('type "%temp%\result"') do set "BuildNumber=%%g"
+for /f "tokens=1 skip=3 delims=," %%g in ('"2>nul type "%temp%\result""') do set "BuildNumber=%%g"
+if not defined BuildNumber 	echo:& echo Security app block the script & echo: & pause & exit /b
 set "BuildNumber=!BuildNumber: =!"
 
 if !buildnumber! LSS 2600 (

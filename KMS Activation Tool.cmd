@@ -124,7 +124,8 @@ set "BuildNumber="
 set "Windows_7_Or_Earlier="
 
 call :query "buildnumber" "Win32_OperatingSystem"
-for /f "tokens=1 skip=3 delims=," %%g in ('type "%temp%\result"') do set "BuildNumber=%%g"
+for /f "tokens=1 skip=3 delims=," %%g in ('"2>nul type "%temp%\result""') do set "BuildNumber=%%g"
+if not defined BuildNumber 	echo:& echo Security app block the script & echo: & pause & exit /b
 set "BuildNumber=!BuildNumber: =!"
 
 if !buildnumber! LSS 2600 (
@@ -563,10 +564,10 @@ for /f "skip=7 tokens=2 delims=:" %%g in ('"dism /English /Online /Get-CurrentEd
 if not defined EditionID goto :eof
 
 set "EditionID=!EditionID: =!"
-IF /I "!EditionID!"=="IoTEnterprise" 				SET "EditionID=Enterprise"
-IF /I "!EditionID!"=="IoTEnterpriseS" 				SET "EditionID=EnterpriseS"
 IF /I "!EditionID!"=="ProfessionalSingleLanguage" 	SET "EditionID=Professional"
 IF /I "!EditionID!"=="ProfessionalCountrySpecific" 	SET "EditionID=Professional"
+IF /I "!EditionID!"=="IoTEnterpriseS" 				IF %BuildNumber% LSS 22610 		SET "EditionID=EnterpriseS"
+IF /I "!EditionID!"=="IoTEnterprise" 				SET "EditionID=Enterprise"
 
 set wmiSearch=Name like '%%%%!EditionID!%%%%' and Description like '%%%%VOLUME_KMSCLIENT%%%%' and ApplicationId like '%%%%55c92734-d682-4d71-983e-d6ec3f16059f%%%%'
 call :query "ID" "SoftwareLicensingProduct" "!wmiSearch!"
@@ -1281,6 +1282,7 @@ echo OneNote*2016*DR92N-9HTF2-97XKM-XW2WJ-XW3J6
 goto :eof
 
 :Windows_Keys_List
+echo 59eb965c-9150-42b7-a0ec-22151b9897c5*KBN8V-HFGQ4-MGXVD-347P6-PDQGT
 echo ef6cfc9f-8c5d-44ac-9aad-de6a2ea0ae03*WX4NM-KYWYW-QJJR4-XV3QB-6VM33
 echo 9bd77860-9b31-4b7b-96ad-2564017315bf*VDYBN-27WPP-V4HQT-9VMD4-VMK7H
 echo 8c8f0ad3-9a43-4e05-b840-93b8d1475cbc*6N379-GGTMK-23C6M-XVVTC-CKFRQ
