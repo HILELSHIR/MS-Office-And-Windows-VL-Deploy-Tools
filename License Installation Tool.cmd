@@ -71,18 +71,6 @@ set "IP_ADDRESS=!rand_A!.!rand_B!.!rand_C!.!rand_D!"
 >nul reg add hkcu\software\classes\.Admin\shell\runas\command /f /ve /d "cmd /x /d /r set \"f0=%%2\" &call \"%%2\" %%3" & set "_= %*"
 >nul fltmc || if "%f0%" neq "%~f0" ( cd.>"%tmp%\runas.Admin" & start "%~n0" /high "%tmp%\runas.Admin" "%~f0" "%_:"=""%" &exit /b )
 
-set "WSH_Disabled=" & for %%$ in (HKCU, HKLM) do 2>nul reg query "%%$\Software\Microsoft\Windows Script Host\Settings" /v "Enabled" | >nul find /i "0x0" && set "WSH_Disabled=***"
-if defined WSH_Disabled for %%$ in (HKCU, HKLM) do %PrintNul% REG DELETE "%%$\SOFTWARE\Microsoft\Windows Script Host\Settings" /f /v Enabled
-set "WSH_Disabled=" & for %%$ in (HKCU, HKLM) do 2>nul reg query "%%$\Software\Microsoft\Windows Script Host\Settings" /v "Enabled" | >nul find /i "0x0" && set "WSH_Disabled=***"
-if defined WSH_Disabled (
-	cls
-	echo.
-	echo ERROR ### Windows script host is disabled
-	echo.
-	if not defined debugMode pause
-	exit /b
-)
-
 cd /d "%~dp0"
 
 if not exist "Tools\KmsHelper.vbs" (
@@ -116,9 +104,58 @@ set LicensingProductClass=SoftwareLicensingProduct
 set "BuildNumber="
 set "Windows_7_Or_Earlier="
 
+for %%$ in (HKCU, HKLM) do (
+	set "WSH_%%$="
+	%PrintNul% reg query "%%$\Software\Microsoft\Windows Script Host\Settings" /v "Enabled" && (
+		for /f "tokens=*" %%# in ('"reg query "%%$\Software\Microsoft\Windows Script Host\Settings" /v "Enabled" | more +2"') do (
+			set "wsh_val=%%#"
+			if    "!wsh_val:~21!" EQU "0" 		set "WSH_%%$=SET"
+			if /i "!wsh_val:~24!" EQU "0x0" 	set "WSH_%%$=SET"
+		)
+	)
+)
+for %%$ in (HKCU, HKLM) do (
+	if defined WSH_%%$ (
+		%PrintNul% REG DELETE "%%$\SOFTWARE\Microsoft\Windows Script Host\Settings" /f /v Enabled || (
+			cls
+			echo #### ERROR:: WMI FAILURE
+			echo:
+			echo - Windows script host is disabled
+			echo.
+			pause
+			exit /b
+		)
+	)
+)
+
+2>nul reg query "HKLM\SYSTEM\CurrentControlSet\Services\Winmgmt" /v "Start" | >nul find /i "0x4" && (
+	%PrintNul% sc config Winmgmt start=auto || (
+		pause
+		cls
+		echo:
+		echo #### ERROR:: WMI FAILURE
+		echo:
+		echo - winmgmt service is not working
+		echo:
+		pause
+		exit /b
+	)
+)
+
 call :query "buildnumber" "Win32_OperatingSystem"
 for /f "tokens=1 skip=3 delims=," %%g in ('"2>nul type "%temp%\result""') do set "BuildNumber=%%g"
-if not defined BuildNumber 	echo:& echo Security app block the script & echo: & pause & exit /b
+if not defined BuildNumber (
+	cls
+	echo:
+	echo #### ERROR:: WMI FAILURE
+	echo:
+	echo - The WMI repository is broken
+	echo - winmgmt service is not working
+	echo - Script run in a sandbox/limited environment
+	echo:
+	pause
+	exit /b
+)
 set "BuildNumber=!BuildNumber: =!"
 
 if !buildnumber! LSS 2600 (
