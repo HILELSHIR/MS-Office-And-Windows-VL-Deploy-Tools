@@ -24,6 +24,7 @@
 	So have to re-written them from scratch,
 	Also add support for Office 2010 / 2013.
 	Also add Online activation as a backup.
+	Also change office products identification by registery key
 	
 	Yerong 			   Office           Documention	
 	letsgoawayhell	           Office 2010      Regitration Keys
